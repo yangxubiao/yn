@@ -15,7 +15,7 @@ server.listen(3000);
 //})
 server.use(cors({
     origin:
-    ["http://127.0.0.1:8080","http://127.0.0.1:8081","http://127.0.0.1:8082","http://localhost:8080","http://localhost:8081","http://localhost:8082"],//放行的端口号，是自己本机的端口号，所以是用自己本身的ip
+    ["http://127.0.0.1:8080","http://127.0.0.1:8081","http://127.0.0.1:8082","http://127.0.0.1:8083","http://localhost:8080","http://localhost:8081","http://localhost:8082","http://localhost:8083"],//放行的端口号，是自己本机的端口号，所以是用自己本身的ip
     credentials:true
   }));
 server.use(session({

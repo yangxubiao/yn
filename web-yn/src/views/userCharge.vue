@@ -21,6 +21,7 @@
         
             <el-form-item>
               <el-button type="primary" @click="onSubmit">立即提交</el-button>
+              <el-button @click="chargeAll" >充值记录</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -63,6 +64,9 @@
               'my-header':myHeader
        },
      methods: {
+        chargeAll(){
+          this.$router.push("/chargeAll")
+         },
         onSubmit() {
           let isArr=[];
            let form=this.form

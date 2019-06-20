@@ -184,5 +184,69 @@ router.get("/history",(req,res)=>{
     })
    
 })
+router.get("/u",(req,res)=>{
+    var uname=req.query.uname;
+    console.log(uname)
+    pool.query("SELECT * FROM  yn_history WHERE uname=?",[uname],(err,result)=>{
+        if(err) throw err;
+        if(result.length>0){
+           var data=result;
+           pool.query("SELECT SUM(total) FROM  yn_history WHERE uname=?",[uname],(err,result)=>{
+               if(err) throw err;
+              
+              res.send({code:1,data:data,total:result})
+            })
+        }else{
+            res.send({code:-1,msg:"此用户目前没有消费记录"})
+        }
+    })
+})
 
+router.get("/chargeAll",(req,res)=>{
+  var arr={};
+  pool.query("SELECT * FROM  yn_charge",(err,result)=>{
+     if(err) throw err;
+     console.log(result);
+    arr.data=result;  
+      pool.query("SELECT SUM(total) FROM  yn_charge",(err,result)=>{
+          if(err) throw err;
+          console.log(result)
+          arr.total=result;
+           res.send(arr);
+        })
+  })  
+})
+
+
+router.get("/All",(req,res)=>{
+  let boolean=req.query.boolean;
+    if(boolean==="1"){
+      pool.query("SELECT * FROM yn_charge ORDER BY total DESC",(err,result)=>{
+        if(err) throw err;
+        res.send(result)  
+     })
+    }else{
+      console.log(0)
+     pool.query("SELECT * FROM yn_charge ORDER BY total ASC",(err,result)=>{
+      if(err) throw err;
+      res.send(result)  
+   })
+    }
+})
+
+router.get("/c",(req,res)=>{
+  var uname=req.query.uname;
+  pool.query("SELECT * FROM  yn_charge WHERE uname=?",[uname],(err,result)=>{
+      if(err) throw err;
+      if(result.length>0){
+         var data=result;
+         pool.query("SELECT SUM(total) FROM  yn_charge WHERE uname=?",[uname],(err,result)=>{
+             if(err) throw err;
+            res.send({code:1,data:data,total:result})
+          })
+      }else{
+          res.send({code:-1,msg:"此用户目前没有充值记录"})
+      }
+  })
+})
 module.exports=router;

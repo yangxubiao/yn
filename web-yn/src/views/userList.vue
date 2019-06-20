@@ -1,28 +1,14 @@
 <template>
     <div>
         <my-header></my-header>
-        <el-table
-          :data="tableData"
-          height="400" border
-          style="width:600px">
-          <el-table-column
-            prop="Rdate"
-            label="注册日期"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="uname"
-            label="姓名"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="Cmoney"
-            label="剩余金额">
-          </el-table-column>
-        </el-table>
+        <el-table  :data="tableData" @cell-click="users($event)" id="user" height="400" border style="width:600px">
+              <el-table-column  prop="Rdate" label="注册日期" width="120"></el-table-column>  
+              <el-table-column prop="uname" label="姓名" width="120"></el-table-column> 
+              <el-table-column prop="Cmoney" label="剩余金额"> </el-table-column>
+       </el-table>
        <div id="footer">
         <el-select v-model="value" filterable placeholder="请选择">
-                <el-option
+                <el-option 
                         v-for="item in options"
                         :key="item.value"
                         :label="item.label"
@@ -62,6 +48,10 @@
      'my-header':myHeader
    },
     methods:{
+      users(e){
+        sessionStorage.setItem("u",e.uname)
+        this.$router.push({name:'userConsumption',params:{uname:e.uname}}) 
+      },
        isAsc(boolean){
            console.log(boolean)
            this.axios.get('/user/isAll?boolean='+boolean).then(res=>{
@@ -95,11 +85,6 @@
               });
               this.$router.push("/index")
           }else if(Admin!==null && Admin.uid===1){
-            this.$notify({
-                title: '成功',
-                message: '欢迎店长来到用户列表页面',
-                 type: 'success'
-              });
               this.axios.get("/user").then(res=>{
                   if(res.data.data.length>0){
                     this.total=res.data.total[0]["SUM(Cmoney)"]
@@ -120,7 +105,7 @@
                     this.$router.push("/userRegister")
                   }
                })     
-            }       
+            }    
           }
         }
       </script>
